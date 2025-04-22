@@ -32,12 +32,14 @@ def attendance():
         cursor.execute("SELECT * FROM students WHERE usn = %s", (usn,))
         student = cursor.fetchone()
 
-        if student and student[1] == name and student[2] == phone:
+        if student and student[1].strip().lower() == name.strip().lower() and student[2].strip() == phone.strip():
             cursor.execute("INSERT INTO farewell (usn, name, phone) VALUES (%s, %s, %s)", (usn, name, phone))
             conn.commit()
             return render_template_string(f"<h2>Thank you {name}! Your attendance is recorded.</h2>")
         else:
-            return render_template_string("<h2>Error: No matching record found.</h2>")
+
+            
+            return render_template_string(f"<h2>Error: No matching record found. {name} {phone} {student[1]} {student[2]}</h2>")
 
     form_html = """
     <h2>Mark Your Attendance</h2>
