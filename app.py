@@ -48,14 +48,83 @@ def attendance():
             return render_template_string(f"<h2>Error: No matching record found.</h2>")
 
     form_html = """
-    <h2>Mark Your Attendance</h2>
-    <form method="POST">
-        <label>USN:</label><br><input type="text" name="usn" required><br><br>
-        <label>Name:</label><br><input type="text" name="name" required><br><br>
-        <label>Phone:</label><br><input type="text" name="phone" required><br><br>
-        <input type="submit" value="Submit">
-    </form>
-    """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Farewell Attendance</title>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background: #f3f4f6;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding-top: 50px;
+                }
+                .form-container {
+                    background: white;
+                    padding: 30px 40px;
+                    border-radius: 15px;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                    max-width: 400px;
+                    width: 90%;
+                }
+                h2 {
+                    margin-bottom: 20px;
+                    text-align: center;
+                    color: #333;
+                }
+                label {
+                    display: block;
+                    margin-top: 15px;
+                    font-weight: bold;
+                    color: #444;
+                }
+                input[type="text"] {
+                    width: 100%;
+                    padding: 10px;
+                    margin-top: 5px;
+                    border-radius: 8px;
+                    border: 1px solid #ccc;
+                    font-size: 16px;
+                }
+                input[type="submit"] {
+                    width: 100%;
+                    padding: 12px;
+                    background-color: #4CAF50;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    margin-top: 25px;
+                    cursor: pointer;
+                    transition: background 0.3s ease;
+                }
+                input[type="submit"]:hover {
+                    background-color: #45a049;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="form-container">
+                <h2>Mark Your Attendance</h2>
+                <form method="POST">
+                    <label for="usn">USN</label>
+                    <input type="text" id="usn" name="usn" required>
+        
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+        
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone" required>
+        
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </body>
+        </html>
+        """
+
     return render_template_string(form_html)
 
 @app.route('/generate_qr')
