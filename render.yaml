@@ -6,10 +6,10 @@ services:
     startCommand: "python app.py"
     envVars:
       - key: DB_HOST
-        value: localhost
+        value: dpg-d03mv4ali9vc73fr6kh0-a
       - key: DB_USER
-        value: root
+        value: farewell_db_user
       - key: DB_PASSWORD
-        value: niv123
+        value: Osylv05EMMUY13HVw3rgxlW8yw2RxeVg
       - key: DB_NAME
-        value: farewell_app
+        value: farewell_db
