@@ -53,7 +53,7 @@ def attendance():
 @app.route('/generate_qr')
 def generate_qr():
     # Use your public Render URL here
-    link = "https://farewell-0l2j.onrender.com"  # Replace with your actual link
+    link = "https://farewell-0l2j.onrender.com/attendance" # Replace with your actual link
 
     # Generate QR code in memory
     img = qrcode.make(link)
