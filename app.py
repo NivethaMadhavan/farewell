@@ -45,7 +45,7 @@ def attendance():
         else:
 
             
-            return render_template_string(f"<h2>Error: No matching record found. {name} {phone} {student[1]} {student[2]}</h2>")
+            return render_template_string(f"<h2>Error: No matching record found.</h2>")
 
     form_html = """
     <h2>Mark Your Attendance</h2>
