@@ -40,11 +40,58 @@ def attendance():
             cursor.execute("DELETE FROM students WHERE usn = %s", (usn,))
             
             conn.commit()
-            return render_template_string(f"<h2>Thank you {name}! Your attendance is recorded.</h2>")
-
-        else:
-
-            
+            return render_template_string(f"""
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Entry Ticket</title>
+                        <style>
+                            body {{
+                                background-color: #f8fafc;
+                                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100vh;
+                            }}
+                            .ticket {{
+                                background: #ffffff;
+                                border: 2px dashed #4f46e5;
+                                border-radius: 15px;
+                                padding: 30px 40px;
+                                width: 350px;
+                                text-align: center;
+                                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                            }}
+                            .ticket h1 {{
+                                color: #4f46e5;
+                                margin-bottom: 10px;
+                            }}
+                            .ticket p {{
+                                margin: 5px 0;
+                                font-size: 18px;
+                                color: #333;
+                            }}
+                            .thank-you {{
+                                margin-top: 20px;
+                                font-size: 16px;
+                                color: #10b981;
+                                font-weight: bold;
+                            }}
+                        </style>
+                    </head>
+                    <body>
+                        <div class="ticket">
+                            <h1>🎟️ Entry Ticket</h1>
+                            <p><strong>Name:</strong> {name}</p>
+                            <p><strong>USN:</strong> {usn}</p>
+                            <p><strong>Phone:</strong> {phone}</p>
+                            <div class="thank-you">✔️ Attendance Confirmed — Enjoy the Farewell!</div>
+                        </div>
+                    </body>
+                    </html>
+                    """)
+        else:            
             return render_template_string(f"<h2>Error: No matching record found.</h2>")
 
     form_html = """
@@ -107,15 +154,15 @@ def attendance():
         </head>
         <body>
             <div class="form-container">
-                <h2>Mark Your Attendance</h2>
+                <h2>GET YOUR COUPON!</h2>
                 <form method="POST">
                     <label for="usn">USN</label>
                     <input type="text" id="usn" name="usn" required>
         
-                    <label for="name">Name</label>
+                    <label for="name">Name (Enter Full Name as on ID Card)</label>
                     <input type="text" id="name" name="name" required>
         
-                    <label for="phone">Phone Number</label>
+                    <label for="phone">Phone Number (Do NOT enter +91) </label>
                     <input type="text" id="phone" name="phone" required>
         
                     <input type="submit" value="Submit">
