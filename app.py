@@ -1,6 +1,6 @@
 import os
 import psycopg2
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template_string
 import qrcode
 
 app = Flask(__name__)
@@ -36,11 +36,39 @@ def attendance():
             # Add student to farewell table
             cursor.execute("INSERT INTO farewell (usn, name, phone) VALUES (%s, %s, %s)", (usn, name, phone))
             conn.commit()
-            return render_template('success.html', name=name)
+            success_html = f"<h1>Thank you, {name}! You have successfully marked your attendance.</h1>"
+            return render_template_string(success_html)
         else:
-            return "Error: No matching record found!"
+            error_html = "<h1>Error: No matching record found!</h1>"
+            return render_template_string(error_html)
 
-    return render_template('attendance_form.html')
+    # If GET request, show attendance form
+    form_html = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Attendance Form</title>
+    </head>
+    <body>
+        <h1>Fill in your details to mark attendance</h1>
+        <form method="POST">
+            <label for="usn">USN:</label>
+            <input type="text" id="usn" name="usn" required><br><br>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" required><br><br>
+
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+    </html>
+    """
+    return render_template_string(form_html)
 
 @app.route('/generate_qr')
 def generate_qr():
