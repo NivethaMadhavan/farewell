@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: farewell-app
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    envVars:
+      - key: DB_HOST
+        value: localhost
+      - key: DB_USER
+        value: root
+      - key: DB_PASSWORD
+        value: niv123
+      - key: DB_NAME
+        value: farewell_app
