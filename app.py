@@ -50,10 +50,10 @@ def attendance():
     """
     return render_template_string(form_html)
 
-@app.route('/generate_qr')
+@app.route('/')
 def generate_qr():
     # Use your public Render URL here
-    link = "https://your-render-app-name.onrender.com/attendance"  # Replace with your actual link
+    link = "https://farewell-0l2j.onrender.com"  # Replace with your actual link
 
     # Generate QR code in memory
     img = qrcode.make(link)
