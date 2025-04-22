@@ -1,0 +1,10 @@
+<!doctype html>
+<title>Farewell Entry</title>
+<h2>Enter Your Details</h2>
+<form method="post">
+  Name: <input name="name" required><br><br>
+  Student USN: <input name="usn" required><br><br>
+  Phone Number: <input name="phone" required><br><br>
+  <input type="submit" value="Submit">
+</form>
+{% if message %}<p><strong>{{ message }}</strong></p>{% endif %}
