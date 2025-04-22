@@ -5,13 +5,13 @@ import qrcode
 
 app = Flask(__name__)
 
-# PostgreSQL connection using environment variables
+# PostgreSQL connection using environment variables (local setup)
 conn = psycopg2.connect(
-    host=os.environ['DB_HOST'],
-    user=os.environ['DB_USER'],
-    password=os.environ['DB_PASSWORD'],
-    dbname=os.environ['DB_NAME'],
-    port=os.environ.get('DB_PORT', 5432)  # Default to 5432 if no port is set
+    host=os.environ.get('DB_HOST'),        # Use environment variable for host
+    user=os.environ.get('DB_USER'),        # Use environment variable for user
+    password=os.environ.get('DB_PASSWORD'), # Use environment variable for password
+    dbname=os.environ.get('DB_NAME'),       # Use environment variable for db name
+    port=os.environ.get('DB_PORT', 5432)    # Default PostgreSQL port is 5432
 )
 
 cursor = conn.cursor()
@@ -73,7 +73,7 @@ def attendance():
 @app.route('/generate_qr')
 def generate_qr():
     # URL of the attendance page
-    link = "https://your-app-name.onrender.com/attendance"
+    link = "http://localhost:5000/attendance"
     
     # Generate QR code
     img = qrcode.make(link)
