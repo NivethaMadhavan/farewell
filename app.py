@@ -33,9 +33,15 @@ def attendance():
         student = cursor.fetchone()
 
         if student and student[1].strip().lower() == name.strip().lower() and student[2].strip() == phone.strip():
+            # Add to farewell
             cursor.execute("INSERT INTO farewell (usn, name, phone) VALUES (%s, %s, %s)", (usn, name, phone))
+            
+            # Remove from students
+            cursor.execute("DELETE FROM students WHERE usn = %s", (usn,))
+            
             conn.commit()
             return render_template_string(f"<h2>Thank you {name}! Your attendance is recorded.</h2>")
+
         else:
 
             
