@@ -50,7 +50,7 @@ def attendance():
     """
     return render_template_string(form_html)
 
-@app.route('/')
+@app.route('/generate_qr')
 def generate_qr():
     # Use your public Render URL here
     link = "https://farewell-0l2j.onrender.com"  # Replace with your actual link
