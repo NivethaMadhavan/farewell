@@ -19,13 +19,13 @@ def home():
     if request.method == 'POST':
         usn = request.form['usn'].strip().upper()
 
-        # Check if USN exists in student table
-        cursor.execute("SELECT * FROM students WHERE usn = %s", (usn,))
-        students = cursor.fetchone()
+        # Check if USN exists in students table
+        cursor.execute("SELECT usn FROM students WHERE usn = %s", (usn,))
+        student = cursor.fetchone()
 
-        if students:
-            # Move student to farewell table
-            cursor.execute("INSERT INTO farewell (usn, name, phone) VALUES (%s, %s, %s)", (students[0], students[1], students[2]))
+        if student:
+            # Move USN to farewell table
+            cursor.execute("INSERT INTO farewell (usn) VALUES (%s)", (usn,))
             cursor.execute("DELETE FROM students WHERE usn = %s", (usn,))
             conn.commit()
             return render_template_string("""
@@ -83,6 +83,7 @@ def home():
                     border-radius: 8px;
                     border: 1px solid #ccc;
                     font-size: 18px;
+                    text-transform: uppercase;
                 }
                 input[type="submit"] {
                     width: 100%;
