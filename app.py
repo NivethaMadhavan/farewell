@@ -20,13 +20,13 @@ def home():
         usn = request.form['usn'].strip().upper()
 
         # Check if USN exists in student table
-        cursor.execute("SELECT * FROM student WHERE usn = %s", (usn,))
-        student = cursor.fetchone()
+        cursor.execute("SELECT * FROM students WHERE usn = %s", (usn,))
+        students = cursor.fetchone()
 
-        if student:
+        if students:
             # Move student to farewell table
-            cursor.execute("INSERT INTO farewell (usn, name, phone) VALUES (%s, %s, %s)", (student[0], student[1], student[2]))
-            cursor.execute("DELETE FROM student WHERE usn = %s", (usn,))
+            cursor.execute("INSERT INTO farewell (usn, name, phone) VALUES (%s, %s, %s)", (students[0], students[1], students[2]))
+            cursor.execute("DELETE FROM students WHERE usn = %s", (usn,))
             conn.commit()
             return render_template_string("""
                 <!DOCTYPE html>
