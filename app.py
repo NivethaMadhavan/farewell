@@ -4,7 +4,7 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# PostgreSQL connection
+# PostgreSQL connection using environment variables
 conn = psycopg2.connect(
     host=os.environ.get('DB_HOST'),
     user=os.environ.get('DB_USER'),
@@ -15,77 +15,101 @@ conn = psycopg2.connect(
 cursor = conn.cursor()
 
 @app.route('/', methods=['GET', 'POST'])
-def check_coupon():
-    message = ""
+def home():
     if request.method == 'POST':
         usn = request.form['usn'].strip().upper()
 
-        # Check if USN exists in 'coupon' table
-        cursor.execute("SELECT * FROM coupon WHERE usn = %s", (usn,))
-        record = cursor.fetchone()
+        # Check if USN exists in student table
+        cursor.execute("SELECT * FROM student WHERE usn = %s", (usn,))
+        student = cursor.fetchone()
 
-        if record:
-            # Move to 'coupon_used'
-            cursor.execute("INSERT INTO coupon_used (usn) VALUES (%s)", (usn,))
-            cursor.execute("DELETE FROM coupon WHERE usn = %s", (usn,))
+        if student:
+            # Move student to farewell table
+            cursor.execute("INSERT INTO farewell (usn, name, phone) VALUES (%s, %s, %s)", (student[0], student[1], student[2]))
+            cursor.execute("DELETE FROM student WHERE usn = %s", (usn,))
             conn.commit()
-            message = "<h2 style='color:green;'>✅ You can eat! Enjoy!</h2>"
+            return render_template_string("""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Success</title>
+                </head>
+                <body style="text-align: center; font-family: Arial, sans-serif; margin-top: 100px;">
+                    <h2 style="color: green;">✅ Enjoy your food!</h2>
+                </body>
+                </html>
+            """)
         else:
-            message = "<h2 style='color:red;'>❌ Sorry, no coupon found.</h2>"
+            return render_template_string("""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Not Found</title>
+                </head>
+                <body style="text-align: center; font-family: Arial, sans-serif; margin-top: 100px;">
+                    <h2 style="color: red;">❌ Sorry, you are not eligible.</h2>
+                </body>
+                </html>
+            """)
 
-    return render_template_string(f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Coupon Check</title>
-        <style>
-            body {{
-                background-color: #f8fafc;
-                font-family: Arial, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                flex-direction: column;
-            }}
-            form {{
-                background: white;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                text-align: center;
-            }}
-            input[type="text"] {{
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 20px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                font-size: 16px;
-            }}
-            input[type="submit"] {{
-                padding: 10px 20px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                font-size: 16px;
-                cursor: pointer;
-            }}
-            input[type="submit"]:hover {{
-                background-color: #45a049;
-            }}
-        </style>
-    </head>
-    <body>
-        <form method="POST">
-            <h2>Enter Your USN to Check Coupon</h2>
-            <input type="text" name="usn" placeholder="Enter USN" required>
-            <input type="submit" value="Check">
-        </form>
-        {message}
-    </body>
-    </html>
+    # Form for entering USN
+    return render_template_string("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Farewell Coupon Check</title>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background: #f3f4f6;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding-top: 100px;
+                }
+                .form-container {
+                    background: white;
+                    padding: 30px 40px;
+                    border-radius: 15px;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                    max-width: 400px;
+                    width: 90%;
+                    text-align: center;
+                }
+                input[type="text"] {
+                    width: 100%;
+                    padding: 12px;
+                    margin-top: 20px;
+                    border-radius: 8px;
+                    border: 1px solid #ccc;
+                    font-size: 18px;
+                }
+                input[type="submit"] {
+                    width: 100%;
+                    padding: 12px;
+                    background-color: #4CAF50;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 18px;
+                    margin-top: 20px;
+                    cursor: pointer;
+                }
+                input[type="submit"]:hover {
+                    background-color: #45a049;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="form-container">
+                <h2>Enter Your USN</h2>
+                <form method="POST">
+                    <input type="text" name="usn" placeholder="Enter your USN" required>
+                    <input type="submit" value="Check">
+                </form>
+            </div>
+        </body>
+        </html>
     """)
 
 if __name__ == '__main__':
