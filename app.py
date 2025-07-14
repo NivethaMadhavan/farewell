@@ -19,7 +19,7 @@ def home():
     if request.method == 'POST':
         usn = request.form['usn'].strip().upper()
 
-        # Check if USN exists in students table
+        # Check if USN exists in students table###
         cursor.execute("SELECT usn FROM students WHERE usn = %s", (usn,))
         student = cursor.fetchone()
 
